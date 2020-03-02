@@ -19,10 +19,10 @@ rospack profile #刷新环境   方法二
 # catkin编译的工作流程
 1. 首先在工作空间`catkin_ws/src/`下递归的查找其中每一个ROS的package。
    - 可以把几个源代码包放到同一个文件夹下
-![](../images/ros-note/catkin_ws.jpg)
+![](imgs/ros-note/catkin_ws.jpg)
 2. package中会有`package.xml`和`CMakeLists.txt`文件，Catkin(CMake)编译系统依据`CMakeLists.txt`文件,从而生成`makefiles`(放在`catkin_ws/build/`)。
 3. 然后`make`刚刚生成的`makefiles`等文件，编译链接生成可执行文件(放在`catkin_ws/devel`)。
-![](../images/ros-note/catkin_flow.jpg)
+![](imgs/ros-note/catkin_flow.jpg)
 
 # 常用命令
 ## rosnode命令
@@ -92,10 +92,10 @@ rospack profile #刷新环境   方法二
 
 # 通信
 ## topic
-![](../images/ros-note/话题通信模型.png)
-![](../images/ros-note/话题通信_自定义msg.png)
-![](../images/ros-note/话题通信_发布者.png)
-![](../images/ros-note/话题通信_订阅者.png)
+![](imgs/ros-note/话题通信模型.png)
+![](imgs/ros-note/话题通信_自定义msg.png)
+![](imgs/ros-note/话题通信_发布者.png)
+![](imgs/ros-note/话题通信_订阅者.png)
 CMakeLists.txt编译:  
 ```bash
 add_executable(talker src/talker.cpp)#可执行文件    源文件
@@ -103,10 +103,10 @@ target_link_libraries(talker ${catkin_LIBRARIES})#可执行文件  固定
 add_dependencies(talker ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})#可执行文件  固定  固定
 ```
 ## service
-![](../images/ros-note/服务通信模型.png)
-![](../images/ros-note/服务通信_自定义srv.png)
-![](../images/ros-note/服务通信_服务器.png)
-![](../images/ros-note/服务通信_客户端.png)
+![](imgs/ros-note/服务通信模型.png)
+![](imgs/ros-note/服务通信_自定义srv.png)
+![](imgs/ros-note/服务通信_服务器.png)
+![](imgs/ros-note/服务通信_客户端.png)
 CMakeLists.txt编译:  
 ```bash
 add_executable(server src/server.cpp)#可执行文件    源文件
@@ -127,10 +127,10 @@ add_dependencies(server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TA
 **注意**：远程过程调用(Remote Procedure Call，RPC),可以简单通俗的理解为在一个进程里调用另一个进程的函数。
 
 ## Action
-![](../images/ros-note/动作通信.png)
-![](../images/ros-note/动作通信_自定义动作.png)
-![](../images/ros-note/动作通信_服务器.png)
-![](../images/ros-note/动作通信_客户端.png)
+![](imgs/ros-note/动作通信.png)
+![](imgs/ros-note/动作通信_自定义动作.png)
+![](imgs/ros-note/动作通信_服务器.png)
+![](imgs/ros-note/动作通信_客户端.png)
 ```bash
 add_executable(DoDishes src/DoDishes.cpp)#可执行文件    源文件
 target_link_libraries(DoDishes ${catkin_LIBRARIES})#可执行文件  固定
@@ -142,7 +142,7 @@ add_dependencies(DoDishes ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_
 回调函数作为参数被传入到了另一个函数中，在未来某个时刻，就会立即执行。
 - 以topic Subscriber为例，回调函数作为参数被传入到了另一个函数中，当有新的message到达，立即执行。（在action server中还有其他变量作为参数传入另一个函数）
 - Subscriber接收到消息，实际上是先把消息放到一个**队列**中去，如图所示。队列的长度在Subscriber构建的时候设置好了。当有spin函数执行，就会去处理消息队列中队首的消息。
-![](../images/ros-note/cb_queue.png)
+![](imgs/ros-note/cb_queue.png)
 
 ## sleep()
 ```cpp
