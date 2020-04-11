@@ -26,4 +26,4 @@
   - ![](imgs/Computational-Graph-&-Backpropagation/cost对神经元某一项求导.png)
 ## Computational Graph RNN
 - ![](imgs/Computational-Graph-&-Backpropagation/计算图_RNN.png)
-  - 导数计算可能存在问题,导数连乘多次
+  - 梯度下降可能会出现问题,导数连乘多次,多用LSTM、GRU
