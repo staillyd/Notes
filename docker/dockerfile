@@ -54,6 +54,7 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 # 常用库
 # numpy==1.16.4只是为了消除tensorflow1.14.0与numpy>1.16.4的feature警告，无其他特殊含义
 RUN python3 -m pip --no-cache-dir install \
+    pylint \
     numpy==1.16.4 \
     pandas \
     scipy \
