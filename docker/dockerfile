@@ -19,7 +19,7 @@ FROM nvidia/cuda:10.0-cudnn7-runtime-ubuntu18.04
 # WORKDIR ${code_path}
 
 # ----------------拷贝离线文件-----------------
-# add:拷贝+压缩   copy:拷贝
+# add:拷贝+解压缩   copy:拷贝
 
 # --------------镜像新建时运行命令--------------
 # 换源 这里echo不加-e(和实际命令行不同)可以直接转化\n
@@ -36,6 +36,7 @@ apt-get install -y --no-install-recommends \
     python3 \
     python3-dev \
     git \
+    gcc g++ gdb make cmake \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -54,6 +55,7 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 # numpy==1.16.4只是为了消除tensorflow1.14.0与numpy>1.16.4的feature警告，无其他特殊含义
 RUN python3 -m pip --no-cache-dir install \
     numpy==1.16.4 \
+    pandas \
     scipy \
     scikit-learn \
     opencv-python \
