@@ -18,7 +18,14 @@
 ## deep-sort
 - 见对应[笔记](https://github.com/staillyd/deep_sort/tree/master/note)
 - 在检测器检测出物体后
-  - 构造状态空间方程，进行Kalman滤波
-  - 根据检测目标的深层特征进行detection和track的匹配
+  - 构造状态空间方程，进行Kalman滤波,预测track在下一帧的位置大小
+  - 根据检测目标的深层特征进行detection和track的匹配(指派问题)
     - 删除kanlam预测的track位置和detection马氏距离过大的匹配对
   - sort:进行iou匹配
+
+## center-track
+- TODO
+
+## Simple Unsupervised Multi-Object Tracking
+- sort得到轨迹,轨迹id当作目标类别,进行ReID训练,替换deep部分
+- ![](imgs/Simple%20Unsupervised%20Multi-Object%20Tracking.png)
