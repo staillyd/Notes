@@ -11,7 +11,8 @@
 
 <center>
 
-![](imgs/Introduction/Figure1.1_1.png)![](imgs/Introduction/Figure1.1_2.png)*__Figure1.1__ The basic idea of Markov localization*
+![](imgs/Introduction/Figure1.1_1.png)![](imgs/Introduction/Figure1.1_2.png)
+*__Figure1.1__ The basic idea of Markov localization*
 </center>
 
 ## 图像描述 
