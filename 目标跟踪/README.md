@@ -29,3 +29,7 @@
 ## Simple Unsupervised Multi-Object Tracking
 - sort得到轨迹,轨迹id当作目标类别,进行ReID训练,替换deep部分
 - ![](imgs/Simple%20Unsupervised%20Multi-Object%20Tracking.png)
+
+## 对ReID的思考
+- 现在的ReID用ID作为类别,每个目标一个ID,进行分类(softmax,triplet loss,cos),但这样感觉无法实现,现实生活中目标个数太多
+- 是否应该用聚类形式的某种函数当作损失
