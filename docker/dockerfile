@@ -1,6 +1,6 @@
 # 从源中pull
 # tensorflow目前不支持10.1以上版本
-FROM nvidia/cuda:10.0-cudnn7-runtime-ubuntu18.04
+FROM nvidia/cuda:10.0-devel-ubuntu18.04
 
 # ------------------设置变量------------------
 # ENV data_path=/data
@@ -19,30 +19,46 @@ FROM nvidia/cuda:10.0-cudnn7-runtime-ubuntu18.04
 # WORKDIR ${code_path}
 
 # ----------------拷贝离线文件-----------------
-# add:拷贝+解压缩   copy:拷贝
+# add:拷贝+压缩   copy:拷贝
 
 # --------------镜像新建时运行命令--------------
 # 换源 这里echo不加-e(和实际命令行不同)可以直接转化\n
-RUN rm -f /etc/apt/sources.list &&\
-echo "deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse\n\
-deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse"\
+# RUN rm -f /etc/apt/sources.list &&\
+# echo "deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse\n\
+# deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse"\
+#     >>/etc/apt/sources.list
+RUN rm -f /etc/apt/sources.list && rm -rf /var/lib/apt/lists/* &&\
+rm /etc/apt/sources.list.d/* &&\
+echo "deb https://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse\n\
+deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse\n\
+deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse\n\
+deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse\n\
+deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse\n\
+deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse\n\
+deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-security main restricted universe multiverse\n\
+deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-security main restricted universe multiverse\n\
+deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse\n\
+deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse"\
     >>/etc/apt/sources.list
 # 安装
 RUN apt-get update &&\
-apt-get install -y --no-install-recommends \
+apt-get install -y \
     software-properties-common \
     curl \
     apt-utils \
     python3 \
     python3-dev \
+    gcc \
+    g++ \
+    make \
+    cmake \
     git \
-    gcc g++ gdb make cmake \
-    && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    && apt-get clean 
+    # rm -rf /var/lib/apt/lists/*
 
 # 配置git
-RUN git config --global user.name "staillyd" &&\
-git config --global user.email "lan1106628183@163.com"
+# RUN git config --global user.name "staillyd" &&\
+# git config --global user.email "lan1106628183@163.com"
 
 # python3 pip
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
@@ -54,9 +70,7 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 # 常用库
 # numpy==1.16.4只是为了消除tensorflow1.14.0与numpy>1.16.4的feature警告，无其他特殊含义
 RUN python3 -m pip --no-cache-dir install \
-    pylint \
     numpy==1.16.4 \
-    pandas \
     scipy \
     scikit-learn \
     opencv-python \
@@ -84,3 +98,9 @@ EXPOSE 1000-1010
 # 开容器的终端
 CMD ["/bin/bash"]
 
+# opencv_c pre
+RUN apt-get install -y build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev &&\
+    apt-get clean 
+
+# 图形显示
+# docker run -it --gpus all --net=host -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --name 'lyd' -v ~/docker_v:/data yolo_v4 bash
