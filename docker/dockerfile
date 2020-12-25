@@ -1,6 +1,5 @@
 # 从源中pull
-# tensorflow目前不支持10.1以上版本
-FROM nvidia/cuda:10.0-devel-ubuntu18.04
+FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu16.04
 
 # ------------------设置变量------------------
 # ENV data_path=/data
@@ -57,15 +56,16 @@ apt-get install -y \
     # rm -rf /var/lib/apt/lists/*
 
 # 配置git
-# RUN git config --global user.name "staillyd" &&\
-# git config --global user.email "lan1106628183@163.com"
+RUN git config --global user.name "staillyd" &&\
+git config --global user.email "lan1106628183@163.com"
 
 # python3 pip
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
     python3 get-pip.py && \
     rm get-pip.py && \
     python3 -m pip config set global.index-url http://pypi.douban.com/simple/ &&\
-    python3 -m pip config set global.trusted-host pypi.douban.com
+    python3 -m pip config set global.trusted-host pypi.douban.com &&\
+    echo "alias python='/usr/bin/python3'">>~/.bashrc
 
 # 常用库
 # numpy==1.16.4只是为了消除tensorflow1.14.0与numpy>1.16.4的feature警告，无其他特殊含义
@@ -98,9 +98,5 @@ EXPOSE 1000-1010
 # 开容器的终端
 CMD ["/bin/bash"]
 
-# opencv_c pre
-RUN apt-get install -y build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev &&\
-    apt-get clean 
-
 # 图形显示
-# docker run -it --gpus all --net=host -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --name 'lyd' -v ~/docker_v:/data yolo_v4 bash
+# docker run -it --gpus all --ipc=host --net=host -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --name 'common' -v ~/Codes:/code -v /datas:/data common bash
