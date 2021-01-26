@@ -150,6 +150,15 @@
 - 给定一组用于自动驾驶应用的典型输入,首先,使用来自光流和分割蒙版的2D图像空间运动一致性形成第一轨迹。其次,使用3D世界空间运动一致性将小轨迹合并到准确的长期轨迹中,同时恢复错过的检测。
 - 绿色的是3D空间中3D运动估计出的
 
+### Joint Monocular 3D Vehicle Detection and Tracking
+![](imgs/Joint%20Monocular%203D%20Vehicle%20Detection%20and%20Tracking/pipline.png)
+- 2D估计3D,代替激光雷达?
+1. Faster R-CNN输出2D bbox,以及3D框中心的估计投影点
+2. 3D姿态估计.得到3维位置[网络估计目标深度,然后利用相机外参,(提前设定的?到预设坐标系的转换矩阵?),得到3维位置],得到相机朝向,得到目标尺寸
+3. 引入遮挡感知关联来解决对象间遮挡问题
+4. 对于tracklet匹配,深度排序通过从目标中过滤出远处的候选来降低不匹配率
+5. LSTM运动估计器更新每个物体的速度和状态,(不依赖摄像机运动或与其他物体的相互作用)
+
 ### DMAN:Online Multi-Object Tracking with Dual Matching Attention Networks
 #### 创新点与贡献
 1. 提出一种空间注意力网络来处理MOT的嘈杂检测和遮挡,
@@ -170,3 +179,21 @@
 #### 创新点与贡献
 1. 对MOTA和MOTP进行微分得到Deep MOT端到端训练的损失函数
 2. 提出匈牙利深度网络替代匈牙利算法,端到端的训练
+
+### Beyond Pixels: Leveraging Geometry and Shape Cues for Online Multi-Object Tracking
+#### 创新点与贡献
+- 设计新的cost,3D-2D,3D-3D,外观cost,形状和位姿cost线性加权的组合.
+
+### Quasi-Dense Similarity Learning for Multiple Object Tracking
+![](imgs/Quasi-Dense%20Similarity%20Learning%20for%20Multiple%20Object%20Tracking/training%20pipline.png)
+
+1. 目标检测:$L_{det}$
+2. Quasi-dense similarity learning
+  - RPN在目标周围生成多个ROI,RoI Align根据尺度从FPN的不同层获得特征,ROI与GT的IOU>0.7当作正样本,反之为负样本
+  - 训练分为关键帧、参考帧(关键帧的前后帧中取一张),根据当前帧样本和参考帧的所有样本定义损失,使得样本和正样本特征靠的近,与负样本特征离的远
+
+![](imgs/Quasi-Dense%20Similarity%20Learning%20for%20Multiple%20Object%20Tracking/testing%20pipline.png)
+
+3. 目标关联
+  - 采用双向匹配,当前帧目标与参考帧目标的特征应该是彼此间最接近的
+  - nms post里的一部分,类间nms
