@@ -41,9 +41,10 @@
         \vdots                     & \vdots                    & \ddots & \vdots    \\
         E[(X_n-\mu_n)(X_1-\mu_1) ] & E[(X_n-\mu_n)(X_2-\mu_2) ]& \dots & E[(X_n-\mu_n)(X_n-\mu_n) ]
     \end{bmatrix}$
-    - $p(x)=\frac{ 1 }{ \sqrt{ (2\pi)^n\begin{vmatrix}
-        \Sigma
-    \end{vmatrix} } }exp\left\{ {-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)}\right\}$
+    - $\begin{aligned}
+      p(x)&=\frac{ 1 }{ \sqrt{ \begin{vmatrix} 2\pi\Sigma \end{vmatrix} } }exp\left\{ {-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)}\right\}\\
+      &=\frac{ 1 }{ \sqrt{ (2\pi)^n\begin{vmatrix} \Sigma \end{vmatrix} } }exp\left\{ {-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)}\right\}
+    \end{aligned}$
 - 条件概率$$p(x|y)=\frac{p(x,y)}{p(y)}$$如果$X$与$Y$相互独立，有：$$p(x|y)=\frac{p(x,y)}{p(y)}=\frac{p(x)p(y)}{p(y)}=p(x)$$
 - 全概率公式
   - 离散：$p(x)=\sum_y p(x|y)p(y)$
@@ -60,7 +61,7 @@
   $$离散：\qquad p(x|y)=\frac{p(y|x)p(x)}{p(y)}=\frac{p(y|x)p(x)}{\sum_{x'}p(y|x')p(x)}\tag{1}\\
   连续：\quad p(x|y)=\frac{p(y|x)p(x)}{p(y)}=\frac{p(y|x)p(x)}{\int_{x'}p(y|x')p(x)dx'}$$
   - 假设$y$是数据（eg:传感器测量数据），$x$为需要从$y$中推测的状态。那么，$p(x)$被称为先验概率分布，$p(x|y)$被称为后验概率分布。在机器人学中，$p(y|x)$被称为生成模型，它在某种程度上描述了状态变量$X$会产生怎样的传感器测量值$Y$。
-  - 在贝叶斯公式中，$p(y)$不依赖于$x$，对于任意$x$，都有相同的$p(y)$。$p(y)^{-1}$通常记为$\eta$，当作贝叶斯公式的正规化子（归一化变量）。
+  - 在贝叶斯公式中，$p(y)$不依赖于$x$，对于任意$x$，都有相同的$p(y)$。**$p(y)^{-1}$通常记为$\eta$，当作贝叶斯公式的正规化子（归一化变量）**。
   $$p(x|y)=\eta p(y|x)p(x)$$
   在其他公式中，$\eta$都是正规化子（归一化变量）。
 - 扩展基本公式
@@ -146,7 +147,7 @@ $x_t$代表$t$时刻的state。典型的状态变量有：
 通常，状态$x_t$是随机地由状态$x_{t-1}$产生的。
 乍一看，状态$x_t$的出现可能是以所有过去的状态、测量和控制为条件的。此时，状态演变的概率可用$p(x_t|x_{0:t-1},z_{1:t-1},u_{1:t})$表示，其中，$u_{t}$是由于假定机器人首先执行一个控制动作$u_1$，然后得到一个测量$z_1$。
 
-1.如果状态$x$是完整的，那么它是所有以前时刻发生的所有状态的充分总结。具体来说，$x_{t-1}$是直到$t-1$时刻的控制（$u_{1:t-1}$）和测量（$z_{1:t-1}$）的一个充分统计量。
+1.如果状态$x$是完整的，那么它是所有以前时刻发生的所有状态的充分总结。具体来说，$x_{t-1}$是直到$t-1$时刻的控制（$u_{1:t-1}$）和测量（$z_{1:t-1}$）的一个**充分统计量**。
 2.马尔科夫性：未来只与现在有关而与过去无关。
 
 由1和2可得：
@@ -165,7 +166,83 @@ $$p(z_t|x_{0:t},z_{1:t-1},u_{1:t})=p(z_t|x_{0:t})=p(z_t|x_{t})$$
 - 预测，$\overline{ bel}(x_t)=p(x_t|z_{1:t-1},u_{1:t})$
 - 更新，$bel(x_t)=p(x_t|z_{1:t},u_{1:t})$
 
-## Bayes Filter
+# Bayes Filter
+## Bayes Filter algorithm
+$\begin{aligned}
+  &\mathbf{Algorithm \; Bayes\_filter}(bel(x_{t-1}),u_t,z_t): \\
+  &\qquad for \; all \; x_t \; do\\
+  &\qquad \qquad \overline{bel}(x_t)=\int p(x_t|u_t,x_{t-1})bel(x_{t-1})dx_{t-1}\\
+  &\qquad \qquad bel(x_t)=\eta p(z_t|x_t) \overline{bel}(x_t)\\
+  &\qquad endfor\\
+  &\qquad return \; bel(x_t)
+\end{aligned}$
 
+- 推导见书籍
 
-### kalman Filter
+## Example
+<center>
+
+![](imgs/Recursive-State-Estimation/Figure%202.3.png)
+*__Figure2.3__ 估计门状态的移动机器人*
+</center>
+
+- 假设门只有开或关两种状态,且只有机器人可以改变门的状态,机器人可以观测门的状态
+- 初始时，$bel(X_0=open)=0.5,bel(X_0=closed)=0.5$
+- 假设传感器有噪声,噪声通过下面条件概率表征:
+  - $p(Z_t=sense\_open|X_t=is\_open)=0.6$
+  - $p(Z_t=sense\_closed|X_t=is\_open)=0.4$
+  - $p(Z_t=sense\_open|X_t=is\_closed)=0.2$
+  - $p(Z_t=sense\_closed|X_t=is\_closed)=0.8$
+- 机器人可以通过操作改变门状态:
+  - $p(X_t=is\_open|U_t=push,X_{t-1}=is\_open)=1$
+  - $p(X_t=is\_closed|U_t=push,X_{t-1}=is\_open)=0$
+  - $p(X_t=is\_open|U_t=push,X_{t-1}=is\_closed)=0.8$
+  - $p(X_t=is\_closed|U_t=push,X_{t-1}=is\_closed)=0.2$
+  - $p(X_t=is\_open|U_t=do\_nothing,X_{t-1}=is\_open)=1$
+  - $p(X_t=is\_closed|U_t=do\_nothing,X_{t-1}=is\_open)=0$
+  - $p(X_t=is\_open|U_t=do\_nothing,X_{t-1}=is\_closed)=0$
+  - $p(X_t=is\_closed|U_t=do\_nothing,X_{t-1}=is\_closed)=1$
+
+- 假设t=1时,机器人没有采取任何动作,但他检测到门是开着的
+  - 没有采取动作
+    - $\begin{aligned}
+      \overline{bel}(x_1)&=\int p(x_1|u_1,x_0)bel(x_0)dx_0\\
+      &=\sum_{x_0}p(x_1|u_1,x_0)bel(x_0)\\
+      &=p(x_1|U_1=do\_nothing,X_0=is\_open)bel(X_0=is\_open)+\\
+      &\qquad p(x_1|U_1=do\_nothing,X_0=is\_closed)bel(X_0=is\_closed)
+    \end{aligned}$
+    - 代入具体状态量
+      - $\begin{aligned}
+      \overline{bel}(X_1=is\_open)&=p(X_1=is\_open|U_1=do\_nothing,X_0=is\_open)bel(X_0=is\_open)+\\
+      &\qquad p(X_1=is\_open|U_1=do\_nothing,X_0=is\_closed)bel(X_0=is\_closed)\\
+      &=1\times 0.5+0\times 0.5\\
+      &=0.5
+      \end{aligned}$
+      - $\begin{aligned}
+      \overline{bel}(X_1=is\_closed)&=p(X_1=is\_closed|U_1=do\_nothing,X_0=is\_open)bel(X_0=is\_open)+\\
+      &\qquad p(X_1=is\_closed|U_1=do\_nothing,X_0=is\_closed)bel(X_0=is\_closed)\\
+      &=0\times 0.5+1\times 0.5\\
+      &=0.5
+      \end{aligned}$
+  - 检测门开着
+    - $bel(x_1)=\eta p(Z_1=sense\_open|x_1)\overline{bel}(x_1)$
+    - 代入具体状态
+      - $\begin{aligned}
+        bel(X_1=is\_open)&=\eta p(Z_1=sense\_open|X_1=is\_open)\overline{bel}(X_1=is\_open)\\
+        &=\eta0.6\times 0.5\\
+        &=0.3\eta
+      \end{aligned}$
+      - $\begin{aligned}
+        bel(X_1=is\_closed)&=\eta p(Z_1=sense\_open|X_1=is\_closed)\overline{bel}(X_1=is\_closed)\\
+        &=\eta0.2\times 0.5\\
+        &=0.1\eta
+      \end{aligned}$
+      - $\eta$:归一化因子
+      - $bel(X_1=is\_open)=0.75$
+      - $bel(X_1=is\_open)=0.25$
+- 对于$u_2=push,Z_2=sense\_open$,可以得到
+  - $\overline{bel}(X_2=is\_open)=1\times 0.75+0.8\times 0.25=0.95$
+  - $\overline{bel}(X_2=is\_closed)=0\times 0.75+0.2\times 0.25=0.05$
+  - ${bel}(X_2=is\_open)=\eta 0.6\times 0.95\approx0.983$
+  - ${bel}(X_2=is\_closed)=\eta 0.2\times 0.05\approx0.017$
+      
