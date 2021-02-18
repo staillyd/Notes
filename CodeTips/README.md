@@ -7,3 +7,6 @@
 - [avod](https://github.com/staillyd/avod/blob/master/info/%E8%AF%B4%E6%98%8E.md)
 - [deep-sort](https://github.com/staillyd/deep_sort/blob/master/note/code.md)
 - [cosine_metric_learning](https://github.com/staillyd/cosine_metric_learning/blob/master/note/code.md)
+
+# github tips
+- 提升github clone速度,将网址替换为:```github.com.cnpmjs.org```
