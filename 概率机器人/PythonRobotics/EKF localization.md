@@ -109,6 +109,10 @@ $P_{t+1} = ( I - K J_H) P_{Pred}$
 
 ## [Code](codes/extended_kalman_filter.py)
 - 蓝线是真实轨迹,
-- 黑线是航位推测法(dead reckoning)得到的轨迹,用初始x真值及u输入代入运动模型迭代得到的轨迹
+- 黑线是航位推测法(dead reckoning)得到的轨迹,用初始x真值及u输入(传感器采集数据)代入运动模型迭代得到的轨迹
 - 绿色点代表观测值 (ex. GPS)
 - 红色线是用 EKF推测得到的轨迹,红色椭圆是EKF估计的方差.
+
+- 自身传感器 速度、陀螺仪传感器的数据噪声小时，motion准
+- GPS本身噪声小时，observation准
+- ekf相当于motion和observation的加权平均，综合考虑各类传感器(速度、陀螺仪、GPS)的数据，QR分别表示对motion、observation的噪声(对方程的相信程度)

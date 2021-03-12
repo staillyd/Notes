@@ -13,8 +13,8 @@ Q = np.diag([
 R = np.diag([1.0, 1.0]) ** 2  # 观测方程的方差
 
 #  Simulation parameter
-INPUT_NOISE = np.diag([1.0, np.deg2rad(30.0)]) ** 2
-GPS_NOISE = np.diag([0.5, 0.5]) ** 2
+INPUT_NOISE = np.diag([1.0, np.deg2rad(30.0)]) ** 2#自身传感器 速度、陀螺仪传感器的数据噪声
+GPS_NOISE = np.diag([0.5, 0.5]) ** 2#GPS本身噪声如果太大，那么估计得到的定位效果差。这里设的是xy每个方向上的误差方差为0.25
 
 DT = 0.1  # time tick [s]
 SIM_TIME = 50.0  # simulation time [s]
