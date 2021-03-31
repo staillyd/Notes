@@ -3,7 +3,6 @@
 ### [R-CNN系列]()
 
 ### [YOLO系列](YOLO.md)
-### [CenterNet](CenterNet.md)
 
 ### [DETR]()
 
