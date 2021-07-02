@@ -49,7 +49,7 @@
   3. 限定超出图像边界的positive anchors为图像边界，防止后续roi pooling时proposal超出图像边界
   4. 剔除尺寸非常小的positive anchors
   5. 对剩余的positive anchors进行NMS（nonmaximum suppression）
-  6. Proposal Layer有3个输入：positive和negative anchors分类器结果rpn_cls_prob_reshape，对应的bbox reg的(e.g. 300)结果作为proposal输出
+  6. Proposal Layer有3个输入：positive vs negative anchors分类器结果，对应的bbox reg变换量，以及im_info。生成proposals
 
 - 总结
   - **生成anchors -> softmax分类器提取positvie anchors -> bbox reg回归positive anchors -> Proposal Layer生成proposals**
