@@ -5,6 +5,9 @@
 
 ### YOLO系列
 - [YOLO v1](YOLO%20v1.md)
+- [YOLO v2](YOLO%20v2.md)
+
+### [CenterNet](CenterNet.md)
 
 ### DETR系列
 
