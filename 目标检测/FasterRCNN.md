@@ -36,7 +36,7 @@
     - reshape:reshape到softmax输入的维度格式，然后reshape到与原维度格式对应的维度格式
   - 经过一层4*9深度，1x1卷积，得到用于得到初始检测框偏移量的FW\*FH\*(4\*9)
     - xywh的偏移量
-- loss
+- **loss**
   - 当图像中有 gt_boxes 时，计算 anchor 与 gt_box 的 IOU
     - 选择 IOU < 0.3 的 anchor 为 background，标签为 0
     - 选择 IOU > 0.7 的 anchor 为 foreground，标签为 1
