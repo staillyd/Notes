@@ -11,7 +11,7 @@
 ![](imgs/YOLO/v1/网络设计.jpg)
 ![](imgs/YOLO/v1/网络结构.png)
 - 卷积层64x下采样
-- 卷积层、池化层输入输出尺寸关系:$W_{out}=\frac{W_{in}+P_1+P_2-F}{S}+1$
+- 卷积层、池化层输入输出尺寸关系:$W_{out}=\frac{W_{in}+P_1+P_2-F}{S}+1$，$W_{out}=\lfloor \frac{W_{in}+2*S-F}{S} \rfloor+1$
   - $P_1、P_2$:两侧padding大小
   - $F$:核大小
   - $S$:步长

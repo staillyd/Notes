@@ -50,17 +50,19 @@
 - 标签
   - 非物体中心点的网格对应标签都为0
   - 物体中心点的anchor:
-    - 得到$\sigma(t_x),\sigma(t_y),t_w,t_h,class,confidence$
+    - 得到$t_x,t_y,t_w,t_h,class,confidence$
     - confidence为1
     - 物体对应类别的概率为1,其他类别为0
 - **网络拟合**
-  - $\sigma(t_x),\sigma(t_y),t_w,t_h,class,confidence$
+  - $t_x,t_y,t_w,t_h,class,confidence$
   - ![](imgs/YOLO/v2/boxes_decode_nn%20target_2.png)
     - 这里的$b_x,b_y,b_w,b_h$是**归一化后的结果**
     - $W,H$为特征图的尺度
   - ![](imgs/YOLO/v2/boxes_decode_nn%20target.png)
+    - 图上的target,$g_x,g_y,g_w,g_h$应该是$t_x,t_y,t_w,t_h$
 - **损失**
   - ![](imgs/YOLO/v2/损失函数.png)
+  - 作者说的类别应该是softmax->交叉熵。[**分类交叉熵**](https://github.com/pjreddie/darknet/issues/1354)
   - $\mathbb{1}_{ij}^{obj}$:匹配原则，对于某个ground truth，先确定其中心点落在哪个cell，然后计算这个cell的5个先验框与ground truth的IOU值.**计算IOU值时不考虑坐标，只考虑形状**，先将先验框与ground truth的中心点都偏移到同一位置（原点），然后计算出对应的IOU值，IOU值最大的那个先验框与ground truth匹配，对应的预测框用来预测这个ground truth
   - $\mathbb{1}_{ij}^{noobj}$:匹配原则，预测框与所有ground truth框进行IOU计算，最大IOU值小于阈值的当作$noobj$
   - 对于那些没有与ground truth匹配的先验框（与预测框对应），除去那些Max_IOU低于阈值的，其它的就全部忽略，不计算任何误差
@@ -68,7 +70,8 @@
   - $\mathbb{1}_{t<12800}$:前12800次迭代。在训练前期使预测框快速学习到先验框的形状
 
 ## 测试
-- 网络输出$\sigma(t_x),\sigma(t_y),t_w,t_h,class,confidence$,经过解码得到$b_x,b_y,b_w,b_h$(特征图尺度下归一化的坐标),在进行尺度变换得到原图的检测框
+- 网络输出$t_x,t_y,t_w,t_h,class,confidence$,经过解码得到$b_x,b_y,b_w,b_h$(特征图尺度下归一化的坐标),在进行尺度变换得到原图的检测框
+- 每个网格的类别概率*每个bbox的confidence作为**置信度得分**，既包含类别信息又包含bbox准确度的信息
 
 # YOLO 9000
 - VOC数据集可以检测20种对象，但实际上对象的种类非常多，只是缺少相应的用于对象检测的训练样本。
