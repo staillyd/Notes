@@ -15,7 +15,7 @@
 - FPN
 - 不同尺度的特征图对应的不同大小的anchor prior
 - ![](imgs/YOLO/v3/anchor.jpg)
-  - ![](imgs/YOLO/v3/9种先验框.jpg)
+  <img src='./imgs/YOLO/v3/9种先验框.jpg' height="600">
 
 ## Darknet 53
 ![](imgs/YOLO/v3/darknet53.jpg)
